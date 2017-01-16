@@ -1,0 +1,46 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.hazelcast.com/schema/spring
+                http://www.hazelcast.com/schema/spring/hazelcast-spring.xsd">
+
+    <bean id="instance" factory-method="newHazelcastInstance" class="com.hazelcast.core.Hazelcast">
+        <constructor-arg index="0" ref="config"/>
+    </bean>
+
+    <bean id="config" class="com.hazelcast.config.Config">
+        <property name="serializationConfig" ref="serializationConfig"/>
+        <property name="servicesConfig" ref="servicesConfig"/>
+        <property name="networkConfig" ref="networkConfig"/>
+        <!--<property name="groupConfig" ref="groupConfig"/>-->
+    </bean>
+
+    <bean id="networkConfig" class="com.hazelcast.config.NetworkConfig">
+        <property name="port" value="5709"/>
+        <property name="interfaces" ref="interfaces"/>
+    </bean>
+
+    <bean id="interfaces" class="com.hazelcast.config.InterfacesConfig">
+        <property name="interfaces">
+            <list>
+                <value>127.0.0.1</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--<bean id="groupConfig" class="com.hazelcast.config.GroupConfig">-->
+        <!--<property name="name" value="esb"/>-->
+        <!--<property name="password" value="123"/>-->
+    <!--</bean>-->
+
+    <bean id="serializationConfig" class="com.hazelcast.config.SerializationConfig"/>
+    <bean id="servicesConfig" class="com.hazelcast.config.ServicesConfig"/>
+
+    <bean id="priorityPortableHookAppenderBeanPostProcessor"
+          class="com.potapov.hazelcast.node.bpp.PriorityPortableHookAppenderBeanPostProcessor"/>
+    <bean id="serviceConfigAppenderBeanPostProcessor"
+          class="com.potapov.hazelcast.node.bpp.ServiceConfigAppenderBeanPostProcessor"/>
+
+</beans>
